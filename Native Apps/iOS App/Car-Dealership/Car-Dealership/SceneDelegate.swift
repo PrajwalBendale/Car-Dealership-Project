@@ -13,7 +13,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     func startLogin() {
         let storyboard = UIStoryboard (name: "Main", bundle: nil)
-        
     let loginvc=storyboard.instantiateViewController(withIdentifier:"LoginViewController")
         self.window?.rootViewController = loginvc
     }
@@ -21,7 +20,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     
     func startHome() {
         let storyboard = UIStoryboard (name: "Main", bundle: nil)
-        
     let homevc=storyboard.instantiateViewController(withIdentifier:"hometabcontroller")
         self.window?.rootViewController = homevc
     }

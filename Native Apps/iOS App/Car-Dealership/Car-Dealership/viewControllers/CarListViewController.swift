@@ -31,7 +31,7 @@ class CarListViewController: BaseViewController,UITableViewDataSource,UITableVie
         
         labelMake.text="\(car.make!)"
         labelModel.text="Model: \(car.model!)"
-        labePrice.text="Price: \(car.price!)"
+        labePrice.text="Price: ₹\(car.price!)"
         loadImage(image: car.image, imageView: image)
         
         

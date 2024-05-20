@@ -51,6 +51,8 @@ class DetailsViewController: BaseViewController {
                         let json = try! JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
                         if json!["message"] as! String=="success"{
                             self.showSuccess(message: "Success")
+                            let sc=self.view.window?.windowScene?.delegate as! SceneDelegate
+                            sc.startHome()
                         }
                         else{
                             self.showSuccess(message: "Something wrong happened!!!")
@@ -107,7 +109,6 @@ class DetailsViewController: BaseViewController {
                                  */
                                 let car=json["result"] as! [[String: Any]]
                                 for carls in car{
-                                    
                                 
                                 self.make.text=carls["Make"] as? String
                                 

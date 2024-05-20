@@ -20,17 +20,16 @@ export function Signin() {
       if (result['message'] == 'success') {
         // cache the token
         
-        const token = result['result'][0].EmployeeId
+        const id = result['result'][0].EmployeeId
         const pos = result['result'][0].position
         const name = result['result'][0].name
-        sessionStorage['EmployeeId'] = token
+        sessionStorage['EmployeeId'] = id
         sessionStorage['Position'] = pos
-        console.log(result['result'])
-        console.log(name)
+        
         toast.success('Welcome '+name)
         navigate('/home')
       } else {
-        toast.error(result['error'])
+        toast.error(result['result'])
       }
     }
   }
@@ -40,7 +39,6 @@ export function Signin() {
       <h1 className='title'>Signin</h1>
 
       <div className='row'>
-        <div className='col'></div>
         <div className='col'>
           <div className='form'>
             <div className='mb-3'>
@@ -62,16 +60,16 @@ export function Signin() {
               />
             </div>
             <div className='mb-3'>
-              {/* <div>
+              <div>
                 Don't have an account? <Link to='/signup'>Signup here</Link>
-              </div> */}
+              </div> 
               <button onClick={onSignin} className='btn btn-primary mt-2'>
                 Signin
               </button>
             </div>
           </div>
         </div>
-        <div className='col'></div>
+        
       </div>
     </>
   )

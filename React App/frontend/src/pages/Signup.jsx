@@ -28,12 +28,13 @@ export function Signup() {
       toast.warn('password does not match')
     } else {
       // make the api call
-      const result = await signupUser(firstName, lastName, email, password)
-      if (result['status'] == 'success') {
+      const result = await signupUser(firstName, lastName, email.toLowerCase(), password)
+
+      if (result['message'] == 'success') {
         toast.success('Successfully registered the user')
         navigate('/')
       } else {
-        toast.error(result['error'])
+        toast.error(result['result'].sqlMessage)
       }
     }
   }
@@ -43,7 +44,6 @@ export function Signup() {
       <h1 className='title'>Signup</h1>
 
       <div className='row'>
-        <div className='col'></div>
         <div className='col'>
           <div className='form'>
             <div className='mb-3'>
@@ -99,7 +99,6 @@ export function Signup() {
             </div>
           </div>
         </div>
-        <div className='col'></div>
       </div>
     </>
   )

@@ -15,7 +15,7 @@ export function Navbar() {
   
   return (
     
-    <nav className='navbar navbar-expand-lg  bg-primary' data-bs-theme='dark'>
+    <nav className='navbar navbar-expand-lg  ' style={{background:'#102C57'}} data-bs-theme='dark'>
       <div className='container-fluid'>
         <div className='collapse navbar-collapse' id='navbarSupportedContent'>
           <ul className='navbar-nav me-auto mb-2 mb-lg-0'>
@@ -24,16 +24,7 @@ export function Navbar() {
                 Home
               </Link>
             </li>
-            {/* <li>
-              <Link className='nav-link' aria-current='page' to='/cart'>
-                Cart ({cart.items.length})
-              </Link>
-            </li> */}
-            <li>
-              <Link className='nav-link' aria-current='page' to='/orders'>
-                Add Cars
-              </Link>
-            </li>
+            
             <li>
               <button
                 onClick={onLogout}

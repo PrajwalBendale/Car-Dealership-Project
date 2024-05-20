@@ -1,21 +1,21 @@
 import { useEffect, useState } from "react"
-import { getInquiriesById } from "../services/pizza"
+import { getInquiriesById } from "../services/car"
 import { toast } from "react-toastify"
 import { useParams } from "react-router-dom";
 
 function CustomerReqinfo(){
     const [enqs, setEnqs] = useState([])
-    console.log(useParams())
+    //console.log(useParams())
     const { customerId,CarID } = useParams();
-    console.log(customerId,CarID)
-        const loadenquiry = async () => {
-  const result = await getInquiriesById(customerId,CarID)
+    //console.log(customerId,CarID)
+    const loadenquiry = async () => {
+    const result = await getInquiriesById(customerId,CarID)
           if (result['message'] == 'success') {
             //console.log(result['result'])
             setEnqs(result['result'])
-            enqs.map(item=>{
-              console.log(item)
-            })
+            // enqs.map(item=>{
+            //   console.log(item)
+            // })
             
           } else {
             toast.error(result['error'])
@@ -32,7 +32,7 @@ function CustomerReqinfo(){
         <>
         <div>
               <h2>Requested Customer Info</h2>
-              <div className='card' style={{ height: 280 }}>
+              <div className='card' >
                 <div className='card-body'>
                   <div className='table-responsive'>
                     <table className='table table-bordered'>

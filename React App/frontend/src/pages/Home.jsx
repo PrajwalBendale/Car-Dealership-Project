@@ -4,7 +4,7 @@ import { toast } from 'react-toastify'
 import Navbar from '../components/Navbar'
 import config from '../config'
 
-import { getAllInquiries, getAllPizzas, updatedStatus } from '../services/pizza'
+import { getAllInquiries, getAllSales, updatedStatus } from '../services/car'
 import { Link, useNavigate } from 'react-router-dom'
 import AdminNavbar from '../components/AdminNavbar'
 
@@ -12,89 +12,55 @@ import AdminNavbar from '../components/AdminNavbar'
 function Inquiry(){
   const navigate = useNavigate()
   const [enqs, setEnqs] = useState([])
+
   const loadAllEnq = async () => {
     const result = await getAllInquiries()
     if (result['message'] == 'success') {
       //console.log(result['result'])
       setEnqs(result['result'])
-      
     } else {
       toast.error(result['error'])
     }
   }
-  const statusChanged = async (currentItem) =>{
-    let id, status;
-    //setEnqs((enqs) =>
-      enqs.map(item =>{
-        if (item.id === currentItem) {
-        id = item.id;
-        status = 'completed'; // Update status directly here
-        return { ...item, status,id }; // Return the modified item
-      }
-      return item;
-          
-  })//)
-  console.log(id,status)
-    const reply = await updatedStatus(id,status) 
-    if (reply['message'] == 'success') {
-      //console.log(result['result'])
-      setEnqs(reply['result'])
+
+  useEffect(() => {
+    loadAllEnq();
+    const interval = setInterval(() => {
+      loadAllEnq();
+    }, 5000);
+    return () => clearInterval(interval); 
+  }, [])
+  
+  const handleStatusChange = async (currentItem) => {
+    const asd = await updatedStatus(currentItem,'completed')
+    if(asd['message'] == 'success'){
+      //setEnqs(asd['result'])
       toast.success("Status is changed succesfully..")
+      loadAllEnq();
       navigate('/home')
     } else {
-      toast.error(reply['error'])
+      toast.error(asd['error'])
     }
-}
-  const handleStatusChange = (currentItem) => {
-      enqs.map(item => {
-        console.log(item)
-        if (item.id === currentItem){
-          item.status="completed"
-          setEnqs(item)
-        }
-          
-      } 
-      )
-    
-    
-    
-      enqs.map((item) =>
-        console.log(item)
-      )
-    
-    // Update the state with the new items
-    
-    statusChanged(currentItem)
-    
-  };
-  
-  useEffect(() => {
-    loadAllEnq()
-    
-  }, [enqs])
-
+};
 
   return (
     <>
-      <div>
-        
+      <div >
             <div>
               <h2>Customer Enquiries:</h2>
-              <div className='card' style={{ minHeight:0 }}>
+              <div className='card' >
                 <div className='card-body'>
-                  <div className='table-responsive'>
+                  <div className='table-responsive' style={{maxHeight:320,overflowY:'auto'}}>
                     <table className='table table-bordered'>
                         <thead>
                             <tr key="Enquiry Id">
                             <th>Enquiry Id</th>
                             <th>CustomerId</th>
-                                <th>CarId</th>
-                                
+                                {/*<th>CarId</th>*/}
                                 <th>Status</th>
-                                
-                            </tr>
+                                </tr>
                         </thead>
-                        <tbody>
+                        <tbody style={{cursor: "all-scroll"}}>
                         {Array.isArray(enqs) &&
                         enqs.map(item => {
 
@@ -105,10 +71,9 @@ function Inquiry(){
                                 <td><Link className='nav-link' aria-current='page' to={`/customerReqinfo/${item.CustomerID}/${item.CarID}`}>
                                 {item.CustomerID}
                                 </Link></td>
-                                <td>{item.CarID}</td>
-
+                                {/*<td>{item.CarID}</td>*/}
                                 <td>
-                                  <p>Status: {item.status}</p>
+                                  <span style={{marginRight:'8px'}}>Status: {item.status}</span>
                                   <button onClick={() => handleStatusChange(item.id)}>Change Status</button>
                                   </td>
                                 
@@ -118,19 +83,14 @@ function Inquiry(){
                             else{
                               return(<></>)
                             }
-                          
-                          
                         })}
-                        
                         </tbody>
                     </table>
                   </div>
                 </div>
               </div>
             </div>
-        
       </div>     
-      
     </>
   )
 }
@@ -139,7 +99,7 @@ function Emp(){
 
   const [items, setItems] = useState([])
   const loadAllPizzas = async () => {
-    const result = await getAllPizzas()
+    const result = await getAllSales()
     if (result['message'] == 'success') {
       //console.log(result['result'])
       setItems(result['result'])
@@ -150,20 +110,22 @@ function Emp(){
   }
 
   useEffect(() => {
-    loadAllPizzas()
+    loadAllPizzas();
+    const interval = setInterval(() => {
+      loadAllPizzas();
+    }, 15000);
+    return () => clearInterval(interval); 
   }, [])
 
   return (
     <>
       <Navbar />
-      
       <div>
-        
-            <div>
+            <div> 
               <h2>Your Sales</h2>
-              <div className='card' style={{ height: 280 }}>
+              <div className='card'>
                 <div className='card-body'>
-                  <div className='table-responsive'>
+                  <div className='table-responsive' style={{maxHeight:320,overflowY:'auto'}}>
                     <table className='table table-bordered'>
                         <thead>
                             <tr>
@@ -174,7 +136,7 @@ function Emp(){
                                 <th>SaleDate</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody style={{cursor: "all-scroll"}}>
                         {
                         items.map(item => {
                           return(
@@ -194,7 +156,6 @@ function Emp(){
                 </div>
               </div>
             </div>
-        
       </div>     
       
     </>
@@ -215,66 +176,50 @@ function AdminDB() {
   }
 
   useEffect(() => {
-    loadAllEnq()
-    
-  }, [enqs])
-
+    loadAllEnq()    
+  }, [])
 
   return(
     <>
     <h1>Welcome Admin</h1>
     <div>
-        
-            <div>
+      <div>
               <h2>Customer Enquiries:</h2>
-              <div className='card' style={{ minHeight:0 }}>
-                <div className='card-body' style={{maxHeight:350}}>
+              <div className='card'>
+                <div className='card-body'>
                   <div className='table-responsive' style={{maxHeight:320,overflowY:'auto'}}>
                     <table className='table table-bordered'>
                         <thead>
                             <tr key="Enquiry Id">
                             <th>Enquiry Id</th>
                             <th>CustomerId</th>
-                                <th>CarId</th>
-                                
-                                <th>Status</th>
-                                
+                            <th>CarId</th>                                
+                            <th>Status</th>                                
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody style={{cursor: "all-scroll"}}>
                         {Array.isArray(enqs) &&
                         enqs.map(item => {
-
-                            
-                              return(                              
+                        return(                              
                               <tr key={item.id}>
                                 <td> {item.id}</td>
                                 <td><Link className='nav-link' aria-current='page' to={`/customerReqinfo/${item.CustomerID}/${item.CarID}`}>
                                 {item.CustomerID}
                                 </Link></td>
                                 <td>{item.CarID}</td>
-
                                 <td>
                                   {item.status}
-                                  
-                                  </td>
-                                
+                                </td>
                                 </tr>
                                 )
-                           
-                          
-                          
-                        })}
-                        
+                            })}
                         </tbody>
                     </table>
                   </div>
                 </div>
               </div>
             </div>
-        
-      </div>     
-      
+      </div>           
     </>
   )
 }
