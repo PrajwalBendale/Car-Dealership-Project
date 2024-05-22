@@ -7,12 +7,23 @@ const empRoutes = require("./routes/employees");
 const salesRoutes = require("./routes/sales");
 const customersRoutes = require("./routes/customers");
 const custinq = require("./routes/inquiry");
+
 const app = express();
-app.use(express.static("images"));
 
 app.use(express.json());
-app.use(cors());
-
+//app.use(cors());
+app.use(
+  cors({
+    origin: [
+      "http://localhost:3000",
+      "https://dfc3-103-81-38-108.ngrok-free.app",
+    ], // Allow requests from a specific origin
+    methods: ["GET", "POST", "PUT", "DELETE"], // Limit methods to specific ones
+    allowedHeaders: ["Content-Type", "Authorization"], // Limit allowed headers
+    credentials: true, // Allow credentials if necessary
+  })
+);
+app.use(express.static("images"));
 //app.use('/todos',todolistRoutes);
 app.use("/cars", carsRoutes);
 app.use("/emp", empRoutes);

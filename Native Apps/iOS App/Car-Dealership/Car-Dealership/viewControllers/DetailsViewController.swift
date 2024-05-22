@@ -104,9 +104,6 @@ class DetailsViewController: BaseViewController {
                         
                         
                             if(json["message"] as! String=="success"){
-                                /*
-                                 let carsLS=json["result"] as! [[String: Any]]
-                                 */
                                 let car=json["result"] as! [[String: Any]]
                                 for carls in car{
                                 
@@ -116,7 +113,7 @@ class DetailsViewController: BaseViewController {
                                     let yearint=carls["Year"] as? Int
                                     self.year.text=String(yearint!)
                                 
-                                self.price.text=carls["Price"] as? String
+                                self.price.text="₹\(carls["Price"] as! String)"
                                 
                                 self.avail.text=carls["Status"] as? String
                                     

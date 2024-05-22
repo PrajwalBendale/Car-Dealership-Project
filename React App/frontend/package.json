@@ -17,7 +17,9 @@
     "react-select": "^5.8.0",
     "react-toastify": "^10.0.4",
     "sass": "^1.70.0",
-    "web-vitals": "^2.1.4"
+    "serve": "^14.2.3",
+    "web-vitals": "^2.1.4",
+    "proxy": "http://d6db-103-81-38-108.ngrok-free.app"
   },
   "scripts": {
     "start": "react-scripts start",

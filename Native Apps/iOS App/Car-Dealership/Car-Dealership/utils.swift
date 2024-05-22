@@ -9,7 +9,9 @@ import Foundation
 import UIKit
 import Alamofire
 
-let URL = "http://localhost:9999"
+let URL = "https://car-dealership-node-server.onrender.com"
+//"https://aqueous-reaches-99626-caf016487b6c.herokuapp.com"
+//"http://localhost:9999"
 
 func createURL(path: String) -> String {
     return "\(URL)\(path)"
