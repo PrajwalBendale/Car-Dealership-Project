@@ -74,6 +74,7 @@ app.get("/emp/", (request, response) => {
 // });
 
 app.post("/", (request, response) => {
+  var id = request.body.id;
   var carid = request.body.CarID;
   var cid = request.body.CustomerID;
   var eid = request.body.EmployeeID;
@@ -82,8 +83,20 @@ app.post("/", (request, response) => {
   var connection = mysql.createConnection(connectionDetails);
   connection.query(sql1, (error, result) => {
     if (error == null) {
-      response.send(result);
-      connection.end();
+      connection.query(`delete from inquiry where id=${id}`, (err, res) => {
+        if (err == null) {
+          let reply = {
+            result: result + res,
+            message: "success",
+          };
+          response.setHeader("Content-Type", "application/json");
+          response.write(JSON.stringify(reply));
+          connection.end();
+        } else {
+          response.send(err);
+          connection.end();
+        }
+      });
     } else {
       response.send(error);
       connection.end();

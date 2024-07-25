@@ -137,4 +137,34 @@ app.get("/reqbycustomer/", (request, response) => {
   });
 });
 
+app.get("/allsales/", (request, response) => {
+  var sql = `SELECT i.id, c.CustomerID, c.Name, c.Phone, c.Email, ca.CarID,ca.Model, ca.Price FROM customers c JOIN inquiry i ON c.CustomerID = i.CustomerID JOIN cars ca ON i.CarID = ca.CarID;`;
+  var connection = mysql.createConnection(connectionDetails);
+  connection.query(sql, (error, result) => {
+    if (error == null) {
+      let reply = {
+        result: result,
+        message: "success",
+      };
+
+      response.setHeader("Content-Type", "application/json");
+
+      response.write(JSON.stringify(reply));
+      response.end();
+      connection.end();
+    } else {
+      let reply = {
+        result: error,
+        message: "error",
+      };
+
+      response.setHeader("Content-Type", "application/json");
+
+      response.write(JSON.stringify(reply));
+      response.end();
+      connection.end();
+    }
+  });
+});
+
 module.exports = app;

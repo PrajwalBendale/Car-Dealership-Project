@@ -140,6 +140,7 @@ app.put("/status/", (request, response) => {
     }
   });
 });
+
 app.delete("/", (request, response) => {
   var id = request.body.CarID;
 

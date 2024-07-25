@@ -30,17 +30,20 @@ export function Cart() {
       loadAllCars();
     } else {
       toast.error(result["result"].sqlMessage);
-      console.log(result.result);
+      //console.log(result.result);
+      loadAllCars();
     }
   };
   const ondeleteCar = async (id) => {
     const result = await deleteCar(id);
+    console.log(result);
     if (result["message"] == "success") {
       toast.success("Status is changed succesfully..");
       loadAllCars();
     } else {
       toast.error(result["result"].sqlMessage);
-      console.log(result.result);
+      //console.log(result.result);
+      loadAllCars();
     }
   };
 

@@ -43,6 +43,11 @@ export function AdminNavbar() {
               </Link>
             </li>
             <li>
+              <Link className="nav-link" aria-current="page" to="/sales">
+                Orders
+              </Link>
+            </li>
+            <li>
               <button
                 onClick={onLogout}
                 className="nav-link"

@@ -14,14 +14,30 @@ const connectionDetails = {
 
 //Queries will start from here
 app.get("/", (request, response) => {
-  var sql = "select * from Employees";
+  var sql = "select EmployeeID, Name from Employees";
   var connection = mysql.createConnection(connectionDetails);
   connection.query(sql, (error, result) => {
     if (error == null) {
-      response.send(result);
+      let reply = {
+        result: result,
+        message: "success",
+      };
+
+      response.setHeader("Content-Type", "application/json");
+
+      response.write(JSON.stringify(reply));
+      response.end();
       connection.end();
     } else {
-      let reply = response.send(error);
+      let reply = {
+        result: result,
+        message: "error",
+      };
+
+      response.setHeader("Content-Type", "application/json");
+
+      response.write(JSON.stringify(reply));
+      response.end();
       connection.end();
     }
   });
@@ -65,7 +81,7 @@ app.post("/", (request, response) => {
       response.setHeader("Content-Type", "application/json");
 
       response.write(JSON.stringify(reply));
-      console.log(reply);
+      //console.log(reply);
       //response.send(result);
       connection.end();
       response.end();
