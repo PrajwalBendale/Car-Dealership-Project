@@ -25,7 +25,6 @@ export function Signin() {
         const name = result["result"][0].name;
         sessionStorage["EmployeeId"] = id;
         sessionStorage["Position"] = pos;
-
         toast.success("Welcome " + name);
         navigate("/home");
       } else {

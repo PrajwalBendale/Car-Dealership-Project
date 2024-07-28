@@ -138,7 +138,7 @@ app.get("/reqbycustomer/", (request, response) => {
 });
 
 app.get("/allsales/", (request, response) => {
-  var sql = `SELECT i.id, c.CustomerID, c.Name, c.Phone, c.Email, ca.CarID,ca.Model, ca.Price FROM customers c JOIN inquiry i ON c.CustomerID = i.CustomerID JOIN cars ca ON i.CarID = ca.CarID;`;
+  var sql = `SELECT i.id,i.status, c.CustomerID, c.Name, c.Phone, c.Email, ca.CarID,ca.Model, ca.Price FROM customers c JOIN inquiry i ON c.CustomerID = i.CustomerID JOIN cars ca ON i.CarID = ca.CarID;`;
   var connection = mysql.createConnection(connectionDetails);
   connection.query(sql, (error, result) => {
     if (error == null) {
@@ -163,6 +163,39 @@ app.get("/allsales/", (request, response) => {
       response.write(JSON.stringify(reply));
       response.end();
       connection.end();
+    }
+  });
+});
+
+app.delete("/", (request, response) => {
+  var id = request.body.id;
+  console.log(id);
+  var sql = `delete from inquiry where id=${id};`;
+  var con = mysql.createConnection(connectionDetails);
+  con.query(sql, (error, result) => {
+    if (error == null) {
+      let reply = {
+        result: result,
+        message: "success",
+      };
+      //console.log(result);
+
+      response.setHeader("Content-Type", "application/json");
+
+      response.write(JSON.stringify(reply));
+      response.end();
+      con.end();
+    } else {
+      let reply = {
+        result: error,
+        message: "error",
+      };
+      //console.log(error);
+      response.setHeader("Content-Type", "application/json");
+
+      response.write(JSON.stringify(reply));
+      response.end();
+      con.end();
     }
   });
 });

@@ -3,7 +3,12 @@ import AdminNavbar from "../components/AdminNavbar";
 import { useEffect, useState } from "react";
 
 import { toast } from "react-toastify";
-import { getAllEmployees, getAllSalesReq, onAddSale } from "../services/car";
+import {
+  deleteInquiry,
+  getAllEmployees,
+  getAllSalesReq,
+  onAddSale,
+} from "../services/car";
 import ReactSelect from "react-select";
 
 function Inquiry() {
@@ -49,22 +54,29 @@ function Inquiry() {
     // console.log(price, carId, CustomerId, id);
     // console.log(inqId);
     if (empId.length == 0) {
-      toast.warn("please select Employees");
+      toast.warn("Please Select Employee");
     } else {
       const reply = await onAddSale(id, carId, customerId, empId, price);
       if (reply["message"] == "success") {
-        console.log(reply);
-        toast.success("Record Added successful");
+        //console.log(reply);
+        toast.success("Record Added Successful");
         navigate("/sales");
       } else {
         toast.error("error");
-        console.log(reply);
+        //console.log(reply);
       }
     }
   };
 
   const handleStatusDelete = async (id) => {
-    console.log(id);
+    //console.log(id);
+    const response = await deleteInquiry(id);
+    if (response["message"] == "success") {
+      toast.success("Record deleted Successful");
+      navigate("/sales");
+    } else {
+      toast.error("Error While Deleting Record");
+    }
   };
   const onStatusChange = async (option) => {
     //console.log(option.value);
@@ -97,46 +109,48 @@ function Inquiry() {
                   </thead>
                   <tbody style={{ cursor: "all-scroll" }}>
                     {Array.isArray(enqs) &&
-                      enqs.map((item) => {
-                        return (
-                          <tr key={item.CarID}>
-                            <td> {item.Name}</td>
-                            <td>{item.Email}</td>
-                            <td>{item.Phone}</td>
-                            <td>{item.Model}</td>
-                            <td>{item.Price}</td>
-                            <td>
-                              <ReactSelect
-                                options={options}
-                                placeholder="Employee Name"
-                                menuPortalTarget={document.body}
-                                onChange={(selectedOption) =>
-                                  onStatusChange(selectedOption)
-                                }
-                              />
-                            </td>
-                            <td>
-                              <button
-                                onClick={() =>
-                                  handleStatusChange(
-                                    item.Price,
-                                    item.CarID,
-                                    item.CustomerID,
-                                    item.id
-                                  )
-                                }
-                              >
-                                Change Status
-                              </button>
-                              <button
-                                onClick={() => handleStatusDelete(item.id)}
-                              >
-                                Delete Request
-                              </button>
-                            </td>
-                          </tr>
-                        );
-                      })}
+                      enqs
+                        .filter((item) => item.status === "completed")
+                        .map((item) => {
+                          return (
+                            <tr key={item.CarID}>
+                              <td> {item.Name}</td>
+                              <td>{item.Email}</td>
+                              <td>{item.Phone}</td>
+                              <td>{item.Model}</td>
+                              <td>{item.Price}</td>
+                              <td>
+                                <ReactSelect
+                                  options={options}
+                                  placeholder="Employee Name"
+                                  menuPortalTarget={document.body}
+                                  onChange={(selectedOption) =>
+                                    onStatusChange(selectedOption)
+                                  }
+                                />
+                              </td>
+                              <td>
+                                <button
+                                  onClick={() =>
+                                    handleStatusChange(
+                                      item.Price,
+                                      item.CarID,
+                                      item.CustomerID,
+                                      item.id
+                                    )
+                                  }
+                                >
+                                  Change Status
+                                </button>
+                                <button
+                                  onClick={() => handleStatusDelete(item.id)}
+                                >
+                                  Delete Request
+                                </button>
+                              </td>
+                            </tr>
+                          );
+                        })}
                   </tbody>
                 </table>
               </div>

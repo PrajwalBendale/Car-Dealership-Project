@@ -2,7 +2,7 @@ const mysql = require("mysql2");
 const config = require("config");
 const express = require("express");
 const app = express.Router();
-
+const nodemailer = require("nodemailer");
 //Connection details fetched from confi -> default.json
 const connectionDetails = {
   host: config.get("host"),
@@ -91,6 +91,42 @@ app.post("/", (request, response) => {
           };
           response.setHeader("Content-Type", "application/json");
           response.write(JSON.stringify(reply));
+          connection.query(
+            `select Email from customers where CustomerID=${cid}`,
+            (error, result) => {
+              if (error == null) {
+                //console.log(result[0].Email);
+                var mailid = result[0].Email;
+                const transporter = nodemailer.createTransport({
+                  service: "gmail",
+                  auth: {
+                    user: "prajwalbendale872@gmail.com",
+                    pass: "lagi asdd avaq enon",
+                  },
+                });
+                const mailOptions = {
+                  from: "prajwalbendale872@gmail.com",
+                  to: mailid,
+                  subject: `Purchase Succeful Notification`,
+                  text: `Dear,
+            
+            I hope this message finds you well. Yours Purchase with Big Boys Cars @LuxCars has been succefully done.
+            Thanks for choosing us for Service. Feel free to contact us for further services             
+          
+            Best regards,
+            BBC Team`,
+                };
+                transporter.sendMail(mailOptions, (err, info) => {
+                  if (err) {
+                    console.log(err);
+                  } else {
+                    //console.log("mail sent!!!");
+                  }
+                });
+              }
+            }
+          );
+
           connection.end();
         } else {
           response.send(err);

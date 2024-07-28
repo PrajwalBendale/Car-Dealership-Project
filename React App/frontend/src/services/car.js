@@ -69,6 +69,21 @@ export async function updatedStatus(id, status) {
   }
 }
 
+export async function deleteInquiry(id) {
+  try {
+    //console.log(id);
+    const body = {
+      id,
+    };
+
+    const url = createUrl("/inq/");
+    const response = await axios.delete(`${url}`, { data: body });
+    return response.data;
+  } catch (ex) {
+    return createError(ex);
+  }
+}
+
 export async function getAllCars() {
   const url = createUrl("/cars/");
   const response = await axios.get(`${url}`);
